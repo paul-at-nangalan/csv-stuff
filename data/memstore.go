@@ -14,11 +14,13 @@ const(
 	FLOAT FieldType = "double"
 	STRING FieldType = "string"
 	INT FieldType = "int"
+	TIMESTAMP = "timestamp"
 )
 
 type Field struct{
 	name string
 	fieldtype FieldType
+	format string
 }
 
 type Store interface {
@@ -64,7 +66,7 @@ func (p *MemStore)Create(defs []Definition)error{
 	p.data = make([][]interface{},0)
 	for i, def := range defs{
 		defparts := strings.Split(string(def), "\t ")
-		if len(defparts) != 2{
+		if len(defparts) < 2{
 			return &InvalidDefinition{
 				reason: "Definition should be NAME TYPE, e.g. price double",
 			}
@@ -76,6 +78,9 @@ func (p *MemStore)Create(defs []Definition)error{
 			p.fields[i].fieldtype = STRING
 		case INT:
 			p.fields[i].fieldtype = INT
+		case TIMESTAMP:
+			p.fields[i].fieldtype = TIMESTAMP
+			p.fields[i].format = defparts[2]
 		default:
 			return &InvalidDefinition{
 				reason: "Invalid field type: " + defparts[1],
