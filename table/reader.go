@@ -1,7 +1,7 @@
 package table
 
 import (
-	"csv-stuff/data"
+	"github.com/paul-at-nangalan/csv-stuff/data"
 	"io"
 )
 
@@ -32,6 +32,9 @@ type ImportCfg struct{
 	StaticColData []NamedOffset
 	StaticRowData NamedOffset
 	DataStart NamedOffset
+}
+
+func (p *ImportCfg) Expand() {
 }
 
 func NewImportTable(reader Reader, cfg ImportCfg)*ImportTable {

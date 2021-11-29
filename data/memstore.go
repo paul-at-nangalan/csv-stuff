@@ -54,6 +54,10 @@ type MemStore struct{
 	data [][]interface{}
 }
 
+func NewMemStore()Store{
+	return &MemStore{}
+}
+
 func (p *MemStore)Create(defs []Definition)error{
 	p.fields = make([]Field, len(defs))
 	p.fieldindx = make(map[string]int)
