@@ -52,6 +52,7 @@ func (p *ImportTable)Import( store data.Store)error{
 		fields = append(fields, data.Definition(coldata.Definition))
 	}
 	fields = append(fields, data.Definition(p.importcfg.DataStart.Definition))
+	//fmt.Println("Creating store with fields ", fields)
 	err := store.Create(fields)
 	if err != nil{
 		return err

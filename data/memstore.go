@@ -1,12 +1,14 @@
 package data
 
-import "strings"
+import (
+	"strings"
+)
 
 type FieldType string
 type Definition string
 
 func (p Definition)GetName()string{
-	name := strings.Split(string(p), " [\t]")[0]
+	name := strings.Fields(string(p))[0]
 	return name
 }
 
@@ -65,10 +67,12 @@ func (p *MemStore)Create(defs []Definition)error{
 	p.fieldindx = make(map[string]int)
 	p.data = make([][]interface{},0)
 	for i, def := range defs{
-		defparts := strings.Split(string(def), "\t ")
+		//fmt.Println("Defs: ", def)
+		defparts := strings.Fields(string(def))
+		//fmt.Println("Len def parts ", len(defparts))
 		if len(defparts) < 2{
 			return &InvalidDefinition{
-				reason: "Definition should be NAME TYPE, e.g. price double",
+				reason: "Definition should be NAME TYPE, e.g. price double " + string(def),
 			}
 		}
 		switch FieldType(defparts[1]){
@@ -111,7 +115,7 @@ func (p *MemStore)AddRow()error{
 
 func (p *MemStore)Query(colnames []string, atrow int64)([]interface{}, error){
 	result := make([]interface{}, len(colnames))
-	if atrow > int64(len(p.data)){
+	if atrow >= int64(len(p.data)){
 		return nil, nil
 	}
 
