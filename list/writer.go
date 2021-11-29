@@ -36,7 +36,7 @@ func (p* Exporter)Export(store data.Store, coldefs []data.Definition)error{
 			break ///end of data
 		}
 		output := make([]string, len(resp))
-		for x := 0; x < len(output); i++{
+		for x := 0; x < len(output); x++{
 			output[x] = fmt.Sprint(resp[x])
 		}
 		p.writer.Write(output)
