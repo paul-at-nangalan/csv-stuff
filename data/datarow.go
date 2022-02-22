@@ -32,6 +32,17 @@ func (p *DataRow)Get(fieldname string)(val interface{}, err error){
 	return cmpval, nil
 }
 
+func (p *DataRow)Set(fieldname string, val interface{})error{
+	//fmt.Println("Looking for field val ", fieldname)
+	cmpindex, exists := p.fieldindexes[fieldname]
+	if !exists{
+		return errors.New("Invalid field name " + fieldname)
+	}
+	p.data[cmpindex] = val
+	//fmt.Println("Found field ", fieldname, " with val ", cmpval)
+	return nil
+}
+
 func (p *DataRow)GetRow()[]interface{}{
 	return p.data
 }
