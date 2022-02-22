@@ -11,6 +11,10 @@ type DataRow struct{
 }
 
 func NewDataRow(vals []interface{}, fields map[string]int)*DataRow{
+	if len(vals) != len(fields){
+		log.Panic("Invalid data row, data len must match the field map ",
+			len(vals), " != ", len(fields))
+	}
 	return &DataRow{
 		fieldindexes: fields,
 		data: vals,
