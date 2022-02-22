@@ -1,10 +1,20 @@
 package data
 
-import "errors"
+import (
+	"errors"
+	"log"
+)
 
 type DataRow struct{
 	fieldindexes map[string]int
 	data []interface{}
+}
+
+func NewDataRow(vals []interface{}, fields map[string]int)*DataRow{
+	return &DataRow{
+		fieldindexes: fields,
+		data: vals,
+	}
 }
 
 func (p *DataRow)Get(fieldname string)(val interface{}, err error){
@@ -16,4 +26,15 @@ func (p *DataRow)Get(fieldname string)(val interface{}, err error){
 	cmpval := p.data[cmpindex]
 	//fmt.Println("Found field ", fieldname, " with val ", cmpval)
 	return cmpval, nil
+}
+
+func (p *DataRow)GetRow()[]interface{}{
+	return p.data
+}
+
+func (p *DataRow)SetRow(vals []interface{}){
+	if len(vals) != len(p.data){
+		log.Panic("Invalid operation: cannot set a row of different langth to original")
+	}
+	p.data = vals
 }
