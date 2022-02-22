@@ -30,6 +30,7 @@ type Store interface {
 	AddRow()error
 	AddDataToCurrentRow(data interface{}, fieldname string)error
 	Query(colnames []string, atrow int64)([]interface{}, error)
+	ListErrors()[]error
 }
 
 type InvalidDefinition struct{
@@ -56,16 +57,24 @@ type MemStore struct{
 	fields []Field
 	fieldindx map[string]int
 	data [][]interface{}
+
+	errors []error
 }
 
 func NewMemStore()Store{
 	return &MemStore{}
 }
 
+func (p *MemStore)ListErrors()[]error{
+	panic("Not yet implemented")
+	return nil
+}
+
 func (p *MemStore)Create(defs []Definition)error{
 	p.fields = make([]Field, len(defs))
 	p.fieldindx = make(map[string]int)
 	p.data = make([][]interface{},0)
+	p.errors = make([]error, 0)
 	for i, def := range defs{
 		//fmt.Println("Defs: ", def)
 		defparts := strings.Fields(string(def))
@@ -131,3 +140,15 @@ func (p *MemStore)Query(colnames []string, atrow int64)([]interface{}, error){
 	}
 	return result, nil
 }
+
+func (p *MemStore)GetRow(rowindx int64)(datarow *DataRow, valid bool){
+	if rowindx >= int64(len(p.data)){
+		return nil, false
+	}
+	datarow = &DataRow{
+		fieldindexes: p.fieldindx,
+		data: p.data[rowindx],
+	}
+	return datarow, true
+}
+
