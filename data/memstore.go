@@ -1,36 +1,25 @@
 package data
 
 import (
+	"github.com/paul-at-nangalan/csv-stuff/schema"
 	"strings"
 )
 
-type FieldType string
-type Definition string
-
-func (p Definition)GetName()string{
-	name := strings.Fields(string(p))[0]
-	return name
-}
-
 const(
-	FLOAT FieldType = "double"
-	STRING FieldType = "string"
-	INT FieldType = "int"
-	TIMESTAMP = "timestamp"
+	FLOAT     schema.FieldType = "double"
+	STRING    schema.FieldType = "string"
+	INT       schema.FieldType = "int"
+	TIMESTAMP                  = "timestamp"
 )
 
 type Field struct{
-	name string
-	fieldtype FieldType
-	format string
+	name      string
+	fieldtype schema.FieldType
+	format    string
 }
 
-type Store interface {
-	Create(fields []Definition)error
-	AddRow()error
-	AddDataToCurrentRow(data interface{}, fieldname string)error
-	Query(colnames []string, atrow int64)([]interface{}, error)
-	ListErrors()[]error
+func (p Field)Name()string{
+	return p.name
 }
 
 type InvalidDefinition struct{
@@ -61,7 +50,7 @@ type MemStore struct{
 	errors []error
 }
 
-func NewMemStore()Store{
+func NewMemStore() schema.Store {
 	return &MemStore{}
 }
 
@@ -70,7 +59,7 @@ func (p *MemStore)ListErrors()[]error{
 	return nil
 }
 
-func (p *MemStore)Create(defs []Definition)error{
+func (p *MemStore)Create(defs []schema.Definition)error{
 	p.fields = make([]Field, len(defs))
 	p.fieldindx = make(map[string]int)
 	p.data = make([][]interface{},0)
@@ -84,7 +73,7 @@ func (p *MemStore)Create(defs []Definition)error{
 				reason: "Definition should be NAME TYPE, e.g. price double " + string(def),
 			}
 		}
-		switch FieldType(defparts[1]){
+		switch schema.FieldType(defparts[1]){
 		case FLOAT:
 			p.fields[i].fieldtype = FLOAT
 		case STRING:
@@ -141,7 +130,7 @@ func (p *MemStore)Query(colnames []string, atrow int64)([]interface{}, error){
 	return result, nil
 }
 
-func (p *MemStore)GetRow(rowindx int64)(datarow *DataRow, valid bool){
+func (p *MemStore)GetRow(rowindx int64)(datarow schema.DataRow, valid bool){
 	if rowindx >= int64(len(p.data)){
 		return nil, false
 	}
@@ -152,3 +141,10 @@ func (p *MemStore)GetRow(rowindx int64)(datarow *DataRow, valid bool){
 	return datarow, true
 }
 
+func (p *MemStore)GetFields()[]schema.Field{
+	fields := make([]schema.Field, len(p.fields))
+	for i, field := range p.fields{
+		fields[i] = field
+	}
+	return fields
+}

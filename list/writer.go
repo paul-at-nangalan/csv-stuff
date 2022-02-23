@@ -1,8 +1,8 @@
 package list
 
 import (
-	"github.com/paul-at-nangalan/csv-stuff/data"
 	"fmt"
+	"github.com/paul-at-nangalan/csv-stuff/schema"
 )
 
 type Writer interface {
@@ -18,7 +18,7 @@ func NewExporter(writer Writer)*Exporter{
 	}
 }
 
-func (p* Exporter)Export(store data.Store, coldefs []data.Definition)error{
+func (p* Exporter)Export(store schema.Store, coldefs []schema.Definition)error{
 	colnames := make([]string, len(coldefs))
 	for i, col := range coldefs{
 		colnames[i] = col.GetName()

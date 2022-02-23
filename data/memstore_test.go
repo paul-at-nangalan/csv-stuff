@@ -1,12 +1,13 @@
 package data
 
 import (
+	"github.com/paul-at-nangalan/csv-stuff/schema"
 	"reflect"
 	"testing"
 )
 
 func TestDefinition_GetName(t *testing.T) {
-	def := Definition("Abc int")
+	def := schema.Definition("Abc int")
 	name := def.GetName()
 	if name != "Abc"{
 		t.Error("Failed to get name from def", name)
@@ -15,7 +16,7 @@ func TestDefinition_GetName(t *testing.T) {
 
 func TestMemStore(t *testing.T) {
 	store := NewMemStore()
-	def := []Definition{
+	def := []schema.Definition{
 		"price double",
 		"t1 timestamp 2006-01-02",
 		"instr string",
@@ -78,7 +79,7 @@ func TestMemStore(t *testing.T) {
 func TestInvalidDefinition_Error(t *testing.T) {
 
 	store := NewMemStore()
-	def := []Definition{
+	def := []schema.Definition{
 		"price float",
 		"t1 timestamp 2006-01-02",
 		"instr string",

@@ -1,7 +1,7 @@
 package table
 
 import (
-	"github.com/paul-at-nangalan/csv-stuff/data"
+	"github.com/paul-at-nangalan/csv-stuff/schema"
 	"io"
 )
 
@@ -25,7 +25,7 @@ type Offset struct {
 
 type NamedOffset struct{
 	Offset
-	Definition data.Definition ///e.g. time string
+	Definition schema.Definition ///e.g. time string
 }
 
 type ImportCfg struct{
@@ -44,14 +44,14 @@ func NewImportTable(reader Reader, cfg ImportCfg)*ImportTable {
 	}
 }
 
-func (p *ImportTable)Import( store data.Store)error{
+func (p *ImportTable)Import( store schema.Store)error{
 
-	fields := make([]data.Definition, 0)
-	fields = append(fields, data.Definition(p.importcfg.StaticRowData.Definition))
+	fields := make([]schema.Definition, 0)
+	fields = append(fields, schema.Definition(p.importcfg.StaticRowData.Definition))
 	for _, coldata :=range p.importcfg.StaticColData{
-		fields = append(fields, data.Definition(coldata.Definition))
+		fields = append(fields, schema.Definition(coldata.Definition))
 	}
-	fields = append(fields, data.Definition(p.importcfg.DataStart.Definition))
+	fields = append(fields, schema.Definition(p.importcfg.DataStart.Definition))
 	//fmt.Println("Creating store with fields ", fields)
 	err := store.Create(fields)
 	if err != nil{
