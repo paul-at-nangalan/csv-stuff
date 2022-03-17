@@ -1,6 +1,7 @@
 package data
 
 import (
+	"fmt"
 	"github.com/paul-at-nangalan/csv-stuff/schema"
 	"strings"
 )
@@ -74,6 +75,7 @@ func (p *MemStore)Create(defs []schema.Definition)error{
 			}
 		}
 		typepart := defparts[len(defparts) - 1]
+		fmt.Println("Type ", typepart)
 		switch schema.FieldType(typepart){
 		case FLOAT:
 			p.fields[i].fieldtype = FLOAT
@@ -90,6 +92,7 @@ func (p *MemStore)Create(defs []schema.Definition)error{
 			}
 		}
 		p.fields[i].name = strings.TrimSpace(strings.TrimSuffix(string(def), typepart))
+		fmt.Println("Filed at ", i, " is ", p.fields[i].Name)
 		p.fieldindx[defparts[0]] = i
 	}
 	return nil
