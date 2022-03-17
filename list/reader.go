@@ -39,7 +39,8 @@ func (p *CsvImporter)Import( store schema.Store)error{
 	for i, name := range header{
 		defs[i] = schema.Definition(name + " string") //// we have to treat all as strings
 	}
-	store.Create(defs)
+	err = store.Create(defs)
+	handlers.PanicOnError(err)
 
 	for i := 0; ; i++{
 		row, err := p.reader.Read()
