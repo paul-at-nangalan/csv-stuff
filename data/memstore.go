@@ -73,7 +73,7 @@ func (p *MemStore)Create(defs []schema.Definition)error{
 				reason: "Definition should be NAME TYPE, e.g. price double " + string(def),
 			}
 		}
-		switch schema.FieldType(defparts[1]){
+		switch schema.FieldType(defparts[len(defparts) - 1]){
 		case FLOAT:
 			p.fields[i].fieldtype = FLOAT
 		case STRING:
