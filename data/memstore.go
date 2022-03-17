@@ -92,8 +92,9 @@ func (p *MemStore)Create(defs []schema.Definition)error{
 			}
 		}
 		p.fields[i].name = strings.TrimSpace(strings.TrimSuffix(string(def), typepart))
-		fmt.Printf("Filed at %d is %s", i, p.fields[i].Name())
+		fmt.Printf("Filed at %d is %s\n", i, p.fields[i].Name())
 		p.fieldindx[typepart] = i
+		fmt.Println("Fieldindx ", p.fieldindx[typepart])
 	}
 	return nil
 }
