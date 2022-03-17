@@ -1,7 +1,6 @@
 package data
 
 import (
-	"fmt"
 	"github.com/paul-at-nangalan/csv-stuff/schema"
 	"strings"
 )
@@ -66,7 +65,7 @@ func (p *MemStore)Create(defs []schema.Definition)error{
 	p.data = make([][]interface{},0)
 	p.errors = make([]error, 0)
 	for i, def := range defs{
-		fmt.Println("Defs: ", def)
+		//fmt.Println("Defs: ", def)
 		defparts := strings.Fields(string(def))
 		//fmt.Println("Len def parts ", len(defparts))
 		if len(defparts) < 2{
@@ -75,7 +74,6 @@ func (p *MemStore)Create(defs []schema.Definition)error{
 			}
 		}
 		typepart := defparts[len(defparts) - 1]
-		fmt.Println("Type ", typepart)
 		switch schema.FieldType(typepart){
 		case FLOAT:
 			p.fields[i].fieldtype = FLOAT
@@ -92,17 +90,12 @@ func (p *MemStore)Create(defs []schema.Definition)error{
 			}
 		}
 		p.fields[i].name = strings.TrimSpace(strings.TrimSuffix(string(def), typepart))
-		fmt.Printf("Filed at %d is %s\n", i, p.fields[i].Name())
 		p.fieldindx[p.fields[i].name] = i
-		fmt.Println("Fieldindx ", p.fieldindx[typepart])
 	}
 	return nil
 }
 
 func (p *MemStore)AddDataToCurrentRow(data interface{}, fieldname string)error{
-	for name, val := range p.fieldindx {
-		fmt.Println("FUCKFUCKFUCKFUCKFUC", name, " ", val)
-	}
 	indx, ok := p.fieldindx[fieldname]
 	if !ok{
 		return &InvalidFieldName{
