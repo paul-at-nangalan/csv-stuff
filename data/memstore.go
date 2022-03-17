@@ -100,7 +100,9 @@ func (p *MemStore)Create(defs []schema.Definition)error{
 }
 
 func (p *MemStore)AddDataToCurrentRow(data interface{}, fieldname string)error{
-	fmt.Println("FUCKFUCKFUCKFUCKFUC", p.fieldindx)
+	for name, val := range p.fieldindx {
+		fmt.Println("FUCKFUCKFUCKFUCKFUC", name, " ", val)
+	}
 	indx, ok := p.fieldindx[fieldname]
 	if !ok{
 		return &InvalidFieldName{
