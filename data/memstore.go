@@ -73,7 +73,8 @@ func (p *MemStore)Create(defs []schema.Definition)error{
 				reason: "Definition should be NAME TYPE, e.g. price double " + string(def),
 			}
 		}
-		switch schema.FieldType(defparts[len(defparts) - 1]){
+		typepart := defparts[len(defparts) - 1]
+		switch schema.FieldType(typepart){
 		case FLOAT:
 			p.fields[i].fieldtype = FLOAT
 		case STRING:
@@ -88,7 +89,7 @@ func (p *MemStore)Create(defs []schema.Definition)error{
 				reason: "Invalid field type: " + defparts[1],
 			}
 		}
-		p.fields[i].name = defparts[0]
+		p.fields[i].name = strings.TrimSpace(strings.TrimSuffix(string(def), typepart))
 		p.fieldindx[defparts[0]] = i
 	}
 	return nil
