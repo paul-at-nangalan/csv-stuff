@@ -122,7 +122,7 @@ func (p *MemStore)Query(colnames []string, atrow int64)([]interface{}, error){
 		colindx, ok := p.fieldindx[colname]
 		if !ok{
 			return nil, &InvalidFieldName{
-				reason: "Invalid field name " + colname,
+				reason: "Memstore.Query: Invalid field name " + colname,
 			}
 		}
 		val := p.data[atrow][colindx]
