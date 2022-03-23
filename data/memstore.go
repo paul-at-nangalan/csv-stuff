@@ -1,6 +1,7 @@
 package data
 
 import (
+	"fmt"
 	"github.com/paul-at-nangalan/csv-stuff/schema"
 	"strings"
 )
@@ -65,9 +66,9 @@ func (p *MemStore)Create(defs []schema.Definition)error{
 	p.data = make([][]interface{},0)
 	p.errors = make([]error, 0)
 	for i, def := range defs{
-		//fmt.Println("Defs: ", def)
+		fmt.Println("Defs: ", def)
 		defparts := strings.Fields(string(def))
-		//fmt.Println("Len def parts ", len(defparts))
+		fmt.Println("Len def parts ", len(defparts))
 		if len(defparts) < 2{
 			return &InvalidDefinition{
 				reason: "Definition should be NAME TYPE, e.g. price double " + string(def),
