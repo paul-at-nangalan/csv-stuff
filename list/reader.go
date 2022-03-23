@@ -1,6 +1,7 @@
 package list
 
 import (
+	"fmt"
 	"github.com/paul-at-nangalan/csv-stuff/schema"
 	"io"
 )
@@ -37,6 +38,7 @@ func (p *CsvImporter)Import( store schema.Store)error{
 	handlers.PanicOnError(err)
 	defs := make([]schema.Definition, len(header))
 	for i, name := range header{
+		fmt.Println("Add header ", name)
 		defs[i] = schema.Definition(name + " string") //// we have to treat all as strings
 	}
 	err = store.Create(defs)
