@@ -37,11 +37,11 @@ func (p *CsvImporter)Import( store schema.Store)error{
 	header, err := p.reader.Read()
 	///panic if we get an error before reading any data
 	handlers.PanicOnError(err)
-	defs := make([]schema.Definition, len(header))
-	for i, name := range header{
+	defs := make([]schema.Definition, 0, len(header))
+	for _, name := range header{
 		if strings.TrimSpace(name) != "" {
 			fmt.Println("Add header ", name)
-			defs[i] = schema.Definition(name + " string") //// we have to treat all as strings
+			defs = append(defs, schema.Definition(name + " string")) //// we have to treat all as strings
 		}
 	}
 	err = store.Create(defs)
