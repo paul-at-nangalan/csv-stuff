@@ -1,9 +1,9 @@
 package list
 
 import (
-	"fmt"
 	"github.com/paul-at-nangalan/csv-stuff/schema"
 	"io"
+	"strings"
 )
 import "github.com/paul-at-nangalan/errorhandler/handlers"
 
@@ -38,8 +38,9 @@ func (p *CsvImporter)Import( store schema.Store)error{
 	handlers.PanicOnError(err)
 	defs := make([]schema.Definition, len(header))
 	for i, name := range header{
-		fmt.Println("Add header ", name)
-		defs[i] = schema.Definition(name + " string") //// we have to treat all as strings
+		if strings.TrimSpace(name) != "" {
+			defs[i] = schema.Definition(name + " string") //// we have to treat all as strings
+		}
 	}
 	err = store.Create(defs)
 	handlers.PanicOnError(err)
@@ -54,8 +55,10 @@ func (p *CsvImporter)Import( store schema.Store)error{
 		handlers.PanicOnError(err)
 
 		for x, val := range row{
-			err = store.AddDataToCurrentRow(val, header[x])
-			handlers.PanicOnError(err)
+			if strings.TrimSpace(header[x]) != "" {
+				err = store.AddDataToCurrentRow(val, header[x])
+				handlers.PanicOnError(err)
+			}
 		}
 	}
 	return nil
