@@ -1,7 +1,6 @@
 package list
 
 import (
-	"fmt"
 	"github.com/paul-at-nangalan/csv-stuff/schema"
 	"io"
 	"strings"
@@ -40,7 +39,6 @@ func (p *CsvImporter)Import( store schema.Store)error{
 	defs := make([]schema.Definition, 0, len(header))
 	for _, name := range header{
 		if strings.TrimSpace(name) != "" {
-			fmt.Println("Add header ", name)
 			defs = append(defs, schema.Definition(name + " string")) //// we have to treat all as strings
 		}
 	}
